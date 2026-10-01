@@ -22,9 +22,10 @@ const log = {
 };
 
 let phoneNumber = global.botNumber || "";
-let phoneInput = "";
-const methodCodeQR = process.argv.includes("--qr");
-const methodCode = process.argv.includes("code");
+let phoneInput = process.env.PHONE_NUMBER || "";
+const methodCodeQR = false;
+const methodCode = true;
+let phoneNumber = normalizePhone(process.env.PHONE_NUMBER || "");
 export function normalizePhone(input) {
   let s = String(input).replace(/\D/g, '');
   if (!s) return '';
