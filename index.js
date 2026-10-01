@@ -22,9 +22,10 @@ const log = {
 };
 
 let phoneNumber = global.botNumber || "";
-let phoneInput = "";
-const methodCodeQR = process.argv.includes("--qr");
-const methodCode = process.argv.includes("code");
+let phoneInput = process.env.PHONE_NUMBER || "";
+const methodCodeQR = false;
+const methodCode = true;
+let phoneNumber = normalizePhone(process.env.PHONE_NUMBER || "");
 export function normalizePhone(input) {
   let s = String(input).replace(/\D/g, '');
   if (!s) return '';
@@ -114,18 +115,18 @@ if (methodCodeQR) {
   opcion = "2";
   if (!phoneNumber) {
     console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
-    phoneInput = readlineSync.question("");
+    phoneInput =.question("");
     phoneNumber = normalizePhone(phoneInput);
   }
 } else if (!fs.existsSync("./Sessions/Owner/creds.json")) {
-  opcion = readlineSync.question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "));
+  opcion = .question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "));
   while (!/^[1-2]$/.test(opcion)) {
     console.log(chalk.bold.redBright(`No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`));
-    opcion = readlineSync.question("--> ");
+    opcion = .question("--> ");
   }
   if (opcion === "2") {
     console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
-    phoneInput = readlineSync.question("");
+    phoneInput = .question("");
     phoneNumber = normalizePhone(phoneInput);
   }
 }
