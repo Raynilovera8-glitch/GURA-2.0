@@ -21,22 +21,20 @@ const log = {
   error: (msg) => console.log(chalk.bgRed.white.bold(`ERROR`), chalk.redBright(msg))
 };
 
-let phoneNumber = global.botNumber || "";
-let phoneInput = "";
-const methodCodeQR = process.argv.includes("--qr");
-const methodCode = process.argv.includes("code");
+let phoneNumber = global.botNumber || process.env.PHONE_NUMBER || "";
+let phoneInput = process.env.PHONE_NUMBER || "";
+const methodCodeQR = false;
+const methodCode = true;
+phoneNumber = normalizePhone(phoneNumber);
 export function normalizePhone(input) {
   let s = String(input).replace(/\D/g, '');
   if (!s) return '';
   if (s.startsWith('0')) s = s.replace(/^0+/, '');
   if (s.length === 10 && s.startsWith('3')) s = '57' + s;
-  if (s.startsWith('52') && !s.startsWith('521') && s.length >= 12) s = '521' + s.slice(2);
-  if (s.startsWith('54') && !s.startsWith('549') && s.length >= 11) s = '549' + s.slice(2);
   return s;
 }
 
 const { say } = cfonts
-console.log(chalk.magentaBright('\n❀ Iniciando...'))
   say('Gawr Guura', {
   align: 'center',           
   gradient: ['red', 'blue'] 
@@ -114,18 +112,18 @@ if (methodCodeQR) {
   opcion = "2";
   if (!phoneNumber) {
     console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
-    phoneInput = readlineSync.question("");
+    phoneInput =.question("");
     phoneNumber = normalizePhone(phoneInput);
   }
 } else if (!fs.existsSync("./Sessions/Owner/creds.json")) {
-  opcion = readlineSync.question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "));
+  opcion = .question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "));
   while (!/^[1-2]$/.test(opcion)) {
     console.log(chalk.bold.redBright(`No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`));
-    opcion = readlineSync.question("--> ");
+    opcion = .question("--> ");
   }
   if (opcion === "2") {
     console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
-    phoneInput = readlineSync.question("");
+    phoneInput = .question("");
     phoneNumber = normalizePhone(phoneInput);
   }
 }
