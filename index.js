@@ -107,23 +107,12 @@ function clearSession() {
   }
 }
 
-let opcion;
-if (methodCodeQR) {
-  opcion = "1";
-} else if (methodCode) {
-  opcion = "2";
-  if (!phoneNumber) {
-    console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
-    phoneInput = readlineSync.question("");
-    phoneNumber = normalizePhone(phoneInput);
-  }
-} else if (!fs.existsSync("./Sessions/Owner/creds.json")) {
-  opcion = readlineSync.question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "));
-  while (!/^[1-2]$/.test(opcion)) {
-    console.log(chalk.bold.redBright(`No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`));
-    opcion = readlineSync.question("--> ");
-  }
-  if (opcion === "2") {
+let opcion = "2";
+let phoneInput;
+if (!phoneNumber) {
+  phoneNumber = normalizePhone(process.env.PHONE_NUMBER || "18090000000");
+  console.log(chalk.bold.green(`Usando numero de Render: ${phoneNumber}`));
+}
     console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright("Ejemplo: +57301******")}\n${chalk.bold.magentaBright('---> ')}`));
     phoneInput = readlineSync.question("");
     phoneNumber = normalizePhone(phoneInput);
